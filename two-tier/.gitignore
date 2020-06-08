@@ -1,0 +1,7 @@
+root/ca.srl
+root/ca.key
+root/ca.crt
+leaf/leaf.crt
+leaf/leaf-sha1.crt
+leaf/leaf.csr
+leaf/leaf.key
