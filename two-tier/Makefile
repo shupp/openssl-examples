@@ -20,6 +20,13 @@ verify: leaf/leaf.crt leaf/leaf-sha1.crt root/ca.crt
 	$(OPENSSL) verify -CAfile root/ca.crt leaf/leaf-sha1.crt
 build:
 	docker build -t $(DOCKER_IMAGE) .
+inspect: inspect-root inspect-leaf
+inspect-extensions: root/ca.crt leaf/leaf.crt
+	@echo "ROOT":
+	@$(OPENSSL) x509 -in root/ca.crt -text -certopt no_subject,no_header,no_version,no_serial,no_signame,no_validity,no_issuer,no_pubkey,no_sigdump,no_aux -noout
+	@echo
+	@echo "LEAF":
+	@$(OPENSSL) x509 -in leaf/leaf.crt -text -certopt no_subject,no_header,no_version,no_serial,no_signame,no_validity,no_issuer,no_pubkey,no_sigdump,no_aux -noout
 
 # ROOT
 root/ca.key:
@@ -33,7 +40,7 @@ inspect-root: root/ca.crt
 leaf/leaf.key:
 	$(OPENSSL) genrsa -out $@ 2048
 leaf/leaf.csr: leaf/leaf.key
-	$(OPENSSL) req -config leaf/leaf.csr.conf -new -key leaf/leaf.key -days $(LEAF_DAYS) -out $@
+	$(OPENSSL) req -config leaf/csr.conf -new -key leaf/leaf.key -days $(LEAF_DAYS) -out $@
 inspect-leaf-csr: leaf/leaf.csr
 	$(OPENSSL) req -text -noout -in leaf/leaf.csr
 leaf/leaf.crt: leaf/leaf.csr root/ca.crt
