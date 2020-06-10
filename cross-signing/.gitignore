@@ -1,0 +1,17 @@
+root-1/ca.srl
+root-1/ca.key
+root-1/ca.crt
+root-2/ca.srl
+root-2/ca.key
+root-2/ca.crt
+intermediates/ca.key
+intermediates/ca.csr
+intermediates/ca-1.crt
+intermediates/ca-1.srl
+intermediates/ca-2.crt
+intermediates/ca-2.srl
+leaf/leaf.crt
+leaf/leaf.csr
+leaf/leaf.key
+bundle-1.crt
+bundle-2.crt
