@@ -1,0 +1,14 @@
+root/ca.srl
+root/ca.key
+root/ca.crt
+leaf/leaf.crt
+leaf/leaf.csr
+leaf/leaf.key
+leaf-revoked/leaf.crt
+leaf-revoked/leaf.csr
+leaf-revoked/leaf.key
+crl/crl.pem
+crl/index.txt*
+crl/number
+crl/number.old
+crl/bundle.pem
