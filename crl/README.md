@@ -11,38 +11,42 @@ Certificate Revocation List (CRL):
         Version 2 (0x1)
     Signature Algorithm: sha256WithRSAEncryption
         Issuer: /C=US/ST=California/L=San Francisco/OU=Operations/CN=Fake Root CA/emailAddress=fakeroot@example.org
-        Last Update: Jun 18 21:00:46 2020 GMT
-        Next Update: Jun 18 21:00:46 2021 GMT
+        Last Update: Jun 21 00:18:28 2020 GMT
+        Next Update: Jun 21 00:18:28 2021 GMT
         CRL extensions:
+            X509v3 Authority Key Identifier:
+                keyid:96:9A:63:A8:BB:B4:EE:62:F8:03:B9:2B:DB:D2:21:6E:0C:F4:76:8B
+                DirName:/C=US/ST=California/L=San Francisco/OU=Operations/CN=Fake Root CA/emailAddress=fakeroot@example.org
+                serial:EB:D1:B8:58:0C:AB:1B:43
+
             X509v3 CRL Number:
                 0
 No Revoked Certificates.
     Signature Algorithm: sha256WithRSAEncryption
-         96:93:6c:d4:30:69:be:1a:0b:c8:e6:d6:4c:e1:fd:fe:cf:27:
-         7f:c0:1e:00:60:0b:02:c6:94:1c:31:79:28:07:92:60:fd:6d:
-         b7:cb:3f:a8:1c:61:4c:95:16:05:bc:a1:4c:ba:0b:03:f9:32:
-         17:1f:d1:78:a5:d8:94:93:bc:d2:d6:1e:85:bd:6d:25:cf:40:
-         43:96:89:8f:d0:f6:40:83:33:e7:f2:f6:de:13:ff:71:3f:23:
-         98:97:1d:af:84:bf:81:de:a4:f5:f8:a0:4b:c6:f4:c8:8a:ec:
-         a8:e3:02:4e:25:9e:e6:bf:fc:23:80:47:29:44:b2:0c:71:cd:
-         9b:5a:25:c7:a5:70:b0:e0:74:32:a6:1e:74:b9:39:71:ae:70:
-         58:4f:27:a4:77:58:7a:c0:7c:1a:16:a1:d1:79:1e:0c:9d:c5:
-         89:90:4f:5e:00:f4:3e:c5:6a:ca:86:86:87:2c:27:9a:21:15:
-         76:c0:db:a0:f9:ba:ad:7f:07:60:f9:65:fa:69:f9:af:6c:19:
-         9d:95:a7:32:d2:a4:a6:a9:57:f9:95:58:32:d8:c4:99:b8:a0:
-         c4:8f:78:48:d5:63:0c:4d:ee:bf:b8:a5:62:f2:9f:4a:97:2e:
-         c5:75:1e:b1:6e:3a:27:fc:dd:eb:42:54:d3:a4:a0:dc:73:13:
-         fb:cd:17:b6
+         af:3e:55:2f:66:57:27:9c:b5:40:1b:c4:28:c9:3f:82:95:b1:
+         fd:92:a9:63:29:ab:25:d3:46:bf:9d:bc:3d:43:6b:5e:39:e8:
+         d4:75:2b:f8:d8:93:02:de:50:c1:27:88:24:f0:4b:9a:c6:2c:
+         21:b2:6e:83:30:2a:9c:e0:fe:29:ef:98:0d:4b:ec:e2:49:30:
+         94:de:5c:1c:3c:62:fa:c6:e3:12:70:eb:ea:9b:6d:08:bf:00:
+         85:5f:99:e5:a3:c1:94:c9:69:02:af:7b:04:b6:4e:2f:ba:45:
+         67:6f:83:47:f8:14:4d:ce:9e:c6:bb:ee:98:ca:b9:42:1a:d7:
+         59:01:1d:5e:bd:21:b6:ce:a0:f4:a7:3a:e9:1e:e5:76:03:9d:
+         44:f0:09:0c:9a:d6:4d:d4:ad:3a:76:ea:ba:87:4f:f8:25:70:
+         7f:55:d6:d9:77:d5:a7:51:02:90:49:a0:26:50:5d:0c:d5:ce:
+         0e:70:d0:21:e3:dc:b6:e0:ec:e8:09:cb:e3:cb:29:08:81:05:
+         84:ca:04:94:cc:d2:9e:8e:b0:6d:ab:40:37:79:5d:46:53:d9:
+         96:e7:4e:4c:73:f4:76:f3:f9:23:5d:3a:b6:39:53:5d:bd:77:
+         15:d8:45:7d:b0:a6:42:ef:93:f4:8b:ba:8f:fd:65:13:44:d1:
+         2d:f5:16:25
 ```
 
 Now, let's verify that both certificates are valid and not on the CRL:
 
 ```
-$ make check-leaf-crl
+$ make check-leaf-crl check-leaf-revoked-crl
 cat root/ca.crt crl/crl.pem > crl/bundle.pem
 openssl verify -extended_crl -verbose -CAfile crl/bundle.pem -crl_check leaf/leaf.crt
 leaf/leaf.crt: OK
-$ make check-leaf-revoked-crl
 cat root/ca.crt crl/crl.pem > crl/bundle.pem
 openssl verify -extended_crl -verbose -CAfile crl/bundle.pem -crl_check leaf-revoked/leaf.crt
 leaf-revoked/leaf.crt: OK
@@ -54,8 +58,8 @@ Next, we can revoke a certificate using the reason of "Key Compromise":
 $ make revoke
 openssl ca -revoke leaf-revoked/leaf.crt -keyfile root/ca.key -cert root/ca.crt -config crl/crl.conf -crl_reason keyCompromise
 Using configuration from crl/crl.conf
-Adding Entry with serial number D2A2A96C6F6E35A4 to DB for /C=US/ST=California/L=San Francisco/OU=My Example Website 2/CN=www2.example.org/emailAddress=user@example.org
-Revoking Certificate D2A2A96C6F6E35A4.
+Adding Entry with serial number A934117EB7BBD4F2 to DB for /C=US/ST=California/L=San Francisco/OU=My Example Website 2/CN=www2.example.org/emailAddress=user@example.org
+Revoking Certificate A934117EB7BBD4F2.
 Data Base Updated
 openssl ca -gencrl -keyfile root/ca.key -cert root/ca.crt -out crl/crl.pem -config crl/crl.conf
 Using configuration from crl/crl.conf
@@ -70,33 +74,38 @@ Certificate Revocation List (CRL):
         Version 2 (0x1)
     Signature Algorithm: sha256WithRSAEncryption
         Issuer: /C=US/ST=California/L=San Francisco/OU=Operations/CN=Fake Root CA/emailAddress=fakeroot@example.org
-        Last Update: Jun 18 21:01:33 2020 GMT
-        Next Update: Jun 18 21:01:33 2021 GMT
+        Last Update: Jun 21 00:19:52 2020 GMT
+        Next Update: Jun 21 00:19:52 2021 GMT
         CRL extensions:
+            X509v3 Authority Key Identifier:
+                keyid:96:9A:63:A8:BB:B4:EE:62:F8:03:B9:2B:DB:D2:21:6E:0C:F4:76:8B
+                DirName:/C=US/ST=California/L=San Francisco/OU=Operations/CN=Fake Root CA/emailAddress=fakeroot@example.org
+                serial:EB:D1:B8:58:0C:AB:1B:43
+
             X509v3 CRL Number:
                 1
 Revoked Certificates:
-    Serial Number: D2A2A96C6F6E35A4
-        Revocation Date: Jun 18 21:01:33 2020 GMT
+    Serial Number: A934117EB7BBD4F2
+        Revocation Date: Jun 21 00:19:52 2020 GMT
         CRL entry extensions:
             X509v3 CRL Reason Code:
                 Key Compromise
     Signature Algorithm: sha256WithRSAEncryption
-         09:a8:c4:90:d1:c1:77:1f:fb:8c:69:d3:49:8c:37:bc:37:fe:
-         8e:65:3e:08:26:4d:75:d8:73:68:a7:3f:67:f0:75:86:05:8a:
-         70:19:58:15:c4:d9:a1:b1:ab:99:62:b7:76:d7:30:87:dd:3e:
-         03:82:d1:c4:a5:b7:6a:ae:6a:e0:2b:18:5c:9e:88:78:90:b6:
-         0d:8c:b3:ec:f9:49:bb:29:75:10:47:72:a1:dd:7b:ea:28:07:
-         83:e2:be:ae:dc:cd:58:b3:9c:6f:81:4a:36:38:69:11:ea:8d:
-         77:f1:57:7d:1d:56:0e:05:0c:d2:e2:da:8a:c7:23:1f:13:4b:
-         84:3c:50:32:2d:0e:74:6a:10:13:8e:72:68:c2:c6:db:45:fd:
-         74:a4:d8:0f:00:c8:9e:fb:7d:35:49:a4:b7:5a:49:55:26:84:
-         e7:b3:55:53:d3:6f:b8:5e:0f:1d:19:fe:ca:f0:40:2b:ee:06:
-         d9:a9:66:9f:d6:63:96:69:a0:d3:cd:09:b1:a2:08:df:01:8f:
-         3b:7e:86:b7:07:c5:f5:ce:24:bf:fe:4f:21:b0:4d:95:85:c3:
-         cf:be:b6:3e:a5:4c:40:9c:8a:37:f3:25:2d:32:3e:4d:e8:a9:
-         f2:58:f9:0e:3d:88:8e:31:1a:41:91:d5:fc:45:39:f3:15:ea:
-         eb:02:35:7d
+         6d:15:55:72:bf:c9:da:18:54:d5:f4:d0:9b:84:28:5c:b5:36:
+         36:79:ce:ef:74:c2:4b:88:ae:d9:ea:32:38:7c:d1:99:9a:3b:
+         07:b3:f8:8b:7b:71:c6:bf:af:fe:63:61:26:20:3f:09:23:a1:
+         6c:af:c1:07:51:fd:ff:f9:48:17:6d:d0:43:34:1b:8c:92:b1:
+         17:92:6c:0c:86:ba:64:f2:a7:f9:74:35:d2:01:ae:3e:ec:c2:
+         16:3c:e3:37:07:bd:8c:81:29:25:c5:88:e0:f4:14:5d:54:7f:
+         27:1e:23:0c:17:ff:cb:84:c9:d0:4f:33:99:a5:d8:f2:81:27:
+         57:d1:9a:28:b4:b7:4d:85:a6:7d:0b:1d:b9:98:69:83:e2:84:
+         2b:26:43:bf:d3:5d:00:1d:ef:03:b3:fb:7a:79:3d:06:24:43:
+         0b:52:8a:5d:cb:da:bf:2f:4b:14:5e:52:81:e5:b4:42:8e:14:
+         43:cd:c0:76:9b:47:3a:37:b4:5f:1b:29:cf:02:b0:f0:0c:29:
+         c9:c2:16:5e:9f:7d:a3:77:b0:2c:fb:69:bf:59:33:ee:ea:f3:
+         a2:02:0a:c8:9b:cc:ba:b3:aa:3e:0a:3a:b5:c2:c5:e5:4e:59:
+         1b:56:60:e8:dc:66:8b:9d:cc:1a:0d:02:fd:60:89:3d:1f:f5:
+         fa:11:fb:21
 ```
 
 Also, the we can see that checking the revoked cert against the CRL confirms revocation:
@@ -128,9 +137,9 @@ ROOT:
             X509v3 Basic Constraints: critical
                 CA:TRUE, pathlen:0
             X509v3 Subject Key Identifier:
-                CD:A8:B5:13:70:47:2A:F3:DA:AD:8F:57:82:5C:5A:A5:52:63:54:14
+                96:9A:63:A8:BB:B4:EE:62:F8:03:B9:2B:DB:D2:21:6E:0C:F4:76:8B
             X509v3 Authority Key Identifier:
-                keyid:CD:A8:B5:13:70:47:2A:F3:DA:AD:8F:57:82:5C:5A:A5:52:63:54:14
+                keyid:96:9A:63:A8:BB:B4:EE:62:F8:03:B9:2B:DB:D2:21:6E:0C:F4:76:8B
 
             X509v3 Key Usage: critical
                 Digital Signature, Certificate Sign, CRL Sign
@@ -140,14 +149,19 @@ LEAF:
             X509v3 Basic Constraints: critical
                 CA:FALSE
             X509v3 Subject Key Identifier:
-                D8:85:58:0A:62:4E:66:7B:70:28:63:63:EF:F2:34:FE:D5:67:58:97
+                3C:98:49:5B:1C:B1:88:6F:FD:7B:B3:C6:03:FF:35:4D:AF:29:96:D6
             X509v3 Authority Key Identifier:
-                keyid:CD:A8:B5:13:70:47:2A:F3:DA:AD:8F:57:82:5C:5A:A5:52:63:54:14
+                keyid:96:9A:63:A8:BB:B4:EE:62:F8:03:B9:2B:DB:D2:21:6E:0C:F4:76:8B
 
             X509v3 Key Usage: critical
                 Digital Signature, Key Encipherment
             Authority Information Access:
-                CA Issuers - URI:http://crl.example.com
+                CA Issuers - URI:http://crl.example.com/issuer.pem
+
+            X509v3 CRL Distribution Points:
+
+                Full Name:
+                  URI:http://crl.example.com/crl.pem
 
             X509v3 Subject Alternative Name:
                 DNS:www.example.org, DNS:office.example.org
@@ -157,14 +171,19 @@ LEAF REVOKED:
             X509v3 Basic Constraints: critical
                 CA:FALSE
             X509v3 Subject Key Identifier:
-                51:D4:5C:52:B3:98:6C:56:2F:DE:67:42:58:89:D1:AB:45:64:C8:4A
+                7F:1C:F2:85:C1:B0:FA:B0:6B:8F:16:3F:4A:34:94:B2:72:71:77:A2
             X509v3 Authority Key Identifier:
-                keyid:CD:A8:B5:13:70:47:2A:F3:DA:AD:8F:57:82:5C:5A:A5:52:63:54:14
+                keyid:96:9A:63:A8:BB:B4:EE:62:F8:03:B9:2B:DB:D2:21:6E:0C:F4:76:8B
 
             X509v3 Key Usage: critical
                 Digital Signature, Key Encipherment
             Authority Information Access:
-                CA Issuers - URI:http://crl.example.com
+                CA Issuers - URI:http://crl.example.com/issuer.pem
+
+            X509v3 CRL Distribution Points:
+
+                Full Name:
+                  URI:http://crl.example.com/crl.pem
 
             X509v3 Subject Alternative Name:
                 DNS:www2.example.org, DNS:office2.example.org

@@ -8,6 +8,7 @@ LEAF_DAYS ?= 365
 OPENSSL ?= openssl
 GENERATE_DEPS = root/ca.crt root/ca.key crl/index.txt crl/number
 GENERATE = $(OPENSSL) ca -gencrl -keyfile root/ca.key -cert root/ca.crt -out crl/crl.pem -config crl/crl.conf
+CERT_OPTS = no_subject,no_header,no_version,no_serial,no_signame,no_validity,no_issuer,no_pubkey,no_sigdump,no_aux
 
 help:
 	@echo "Available targets:\n"
@@ -22,13 +23,13 @@ version:
 
 inspect-extensions: root/ca.crt leaf/leaf.crt leaf-revoked/leaf.crt
 	@echo "ROOT":
-	@$(OPENSSL) x509 -in root/ca.crt -text -certopt no_subject,no_header,no_version,no_serial,no_signame,no_validity,no_issuer,no_pubkey,no_sigdump,no_aux -noout
+	@$(OPENSSL) x509 -in root/ca.crt -text -certopt $(CERT_OPTS) -noout
 	@echo
 	@echo "LEAF":
-	@$(OPENSSL) x509 -in leaf/leaf.crt -text -certopt no_subject,no_header,no_version,no_serial,no_signame,no_validity,no_issuer,no_pubkey,no_sigdump,no_aux -noout
+	@$(OPENSSL) x509 -in leaf/leaf.crt -text -certopt $(CERT_OPTS) -noout
 	@echo
 	@echo "LEAF REVOKED":
-	@$(OPENSSL) x509 -in leaf-revoked/leaf.crt -text -certopt no_subject,no_header,no_version,no_serial,no_signame,no_validity,no_issuer,no_pubkey,no_sigdump,no_aux -noout
+	@$(OPENSSL) x509 -in leaf-revoked/leaf.crt -text -certopt $(CERT_OPTS) -noout
 
 
 # ROOT
