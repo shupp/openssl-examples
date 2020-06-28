@@ -16,7 +16,7 @@ CERT_OPTS = no_subject,no_header,no_version,no_serial,no_signame,no_validity,no_
 
 help:
 	@echo "Available targets:\n"
-	@grep '^[^#[:space:]]\+:' Makefile \
+	@grep '^[^.#[:space:]]\+:' Makefile \
 		| awk -F: '{ print $$1 }' \
 		| sort
 
