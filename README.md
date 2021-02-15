@@ -8,6 +8,7 @@ This is a place to capture examples of common openssl use cases for future refer
 * [ocsp](ocsp/) - An example [CA](https://www.openssl.org/docs/man1.1.1/man1/ca.html) implementing both a [Certificate Revocation List](https://en.wikipedia.org/wiki/Certificate_revocation_list) and [OCSP](https://en.wikipedia.org/wiki/Online_Certificate_Status_Protocol).  It's based on a single Certificate Authority, an OCSP signing certificate, one leaf certificate, and another leaf certificate that has been revoked for "Key Compromise".
 * [subject-key-identifier](subject-key-identifier/) - This example shows how you can manually generate a [Subject Key Identifier](https://tools.ietf.org/html/rfc5280#section-4.2.1.2) from a public key.
 * [scrape](scrape/) - Examples of scraping certificates from live services.
+* [ssh-signing](ssh-signing/) - Example of signing a public ssh key for authorizaition by trusted certificates or even principals.
 
 From each of these sub-directories, you can use `make all` to see available targets to work with:
 ```
