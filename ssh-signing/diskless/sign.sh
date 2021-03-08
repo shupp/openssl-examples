@@ -12,7 +12,7 @@ USER_PUBLIC_KEY=${USER_KEY_ID}.pub
 USER_PUBLIC_KEY_SIGNED=${USER_KEY_ID}-cert.pub
 
 # Create named pipes
-mkfifo -m 600 ${CA_PRIVATE_KEY} ${USER_PUBLIC_KEY} ${USER_PUBLIC_KEY_SIGNED}
+mkfifo -m 0600 ${CA_PRIVATE_KEY} ${USER_PUBLIC_KEY} ${USER_PUBLIC_KEY_SIGNED}
 
 # Write private key from environment to pipe and background
 echo "${CA_PRIVATE_KEY_CONTENTS}" > ${CA_PRIVATE_KEY} &
