@@ -7,7 +7,7 @@ PUBLIC_KEY=${PRIVATE_KEY}.pub
 # Create named pipes
 mkfifo ${PRIVATE_KEY} ${PUBLIC_KEY}
 
-# Create private an dpublic keys writing to pipes and then background
+# Create private and public keys writing to pipes and then background
 (echo 'y' | ssh-keygen -f ${PRIVATE_KEY} -C "CA: myca" -b 2048 -V '-1d:+365d' -N '' > /dev/null)&
 
 # Read in key contents from pipes
