@@ -2,7 +2,7 @@
 
 Here is a basic example of signing ssh public keys using `ssh-keygen`. By running `make inspect`, three things will happen:
 
-* A 'signing' private key will be created, `ca.key` and `ca.key.pub`.
+* A 'signing' private and public key pair will be created, `ca.key` and `ca.key.pub`.
 * A private and public key pair will be created, `id` and `id.pub`, the latter of which will later be signed by `ca.key`
 * `id.pub` will be signed by `ca.key` resulting in `id-cert.pub`
 * `ssh-keygen -L` will be run on the signed public key for inspection

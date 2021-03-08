@@ -2,7 +2,7 @@
 
 Here is a basic example of signing ssh public keys using `ssh-keygen`, and using named pipes to avoid writing to disk. By running `make create-and-sign`, three things will happen:
 
-* A 'signing' private CA key will be created
+* A 'signing' private and public CA key pair will be created
 * A private and public USER key pair will be created, the latter of which will later be signed
 * The public USER key will get signed by the private CA key
 * All keys are returned as JSON, without having been written to disk
