@@ -1,0 +1,14 @@
+# Signed Key Configs
+AuthorizedPrincipalsFile /etc/ssh/authorized_principals/%u
+TrustedUserCAKeys /etc/ssh/ca.pub
+PasswordAuthentication no
+
+# Let's see what's happening
+LogLevel DEBUG
+
+# Alpine Defaults
+AuthorizedKeysFile	.ssh/authorized_keys
+AllowTcpForwarding no
+GatewayPorts no
+X11Forwarding no
+Subsystem	sftp	/usr/lib/ssh/sftp-server
